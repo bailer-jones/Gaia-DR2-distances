@@ -8,7 +8,7 @@ source("plot_posterior_prior.R")
 source("./length_scale_model/sphharm_basis.R") # provides sphharm.basis
 
 # Setups
-set.seed(12345) # only used by metropolis.R (?)
+set.seed(12345) # only used by metropolis.R
 HDIprob <- 0.6827
 HDIprobMax <- 0.9 # if computed prob exceeds this, revert to quantiles
 wzp <- -0.029e-3  # parallax ZP in arcseconds: True = GDR2 - ZP
