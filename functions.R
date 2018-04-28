@@ -37,9 +37,8 @@ func.int <- function(func, lower, upper, ...) {
 # 2. all three roots are real => two maxima
 #    if w>=0, take the smallest.
 #    if w<0   take the positive one (there should be only one).
-#   Is that correct/sufficient?
 # The other two possibilities, 0 or 2 real roots, should not occur.
-# If they do, return NA. But maybe 2 can, i.e. identical roots?
+# If they do, return NA. 
 mode.post3 <- function(w, wsd, rlen, retall=FALSE) {
   # special cases:
   # w<=0 works normally, except for w=-Inf
@@ -162,8 +161,6 @@ hdi.distpost3 <- function(w, wsd, rlen, rMode, HDIprob, verbose=FALSE) {
   }
   udPostb[i,] <- ud.distpost3(r=rb[i,], w=w, wsd=wsd, rlen=rlen)
   fprob[i,]   <- (ud.distpost3(r=rMode, w=w, wsd=wsd, rlen=rlen) + udPostb[i,])*dr/(2*Z)
-  #fprob[i,1] <- func.int(func=ud.distpost3, lower=rb[i,1], upper=rMode, w, wsd, rlen)/Z
-  #fprob[i,2] <- func.int(func=ud.distpost3, lower=rMode, upper=rb[i,2], w, wsd, rlen)/Z
   if(verbose) cat(i, rb[i,], fprob[i,], sum(fprob[i,]), "\n")
   for(i in 2:iMax) {
     rb[i,] <- rb[i-1,] - dP/grad.ud.distpost3(r=rb[i-1,], w=w, wsd=wsd, rlen=rlen)
@@ -172,12 +169,10 @@ hdi.distpost3 <- function(w, wsd, rlen, rMode, HDIprob, verbose=FALSE) {
     }
     udPostb[i,] <- ud.distpost3(r=rb[i,], w=w, wsd=wsd, rlen=rlen)
     fprob[i,]   <- (udPostb[i,]+udPostb[i-1,])*abs(rb[i,]-rb[i-1,])/(2*Z) + fprob[i-1,]
-    #fprob[i,1] <- fprob[i-1,1] + func.int(func=ud.distpost3, lower=rb[i,1], upper=rb[i-1,1], w, wsd, rlen)/Z
-    #fprob[i,2] <- fprob[i-1,2] + func.int(func=ud.distpost3, lower=rb[i-1,2], upper=rb[i,2], w, wsd, rlen)/Z
     if(verbose) cat(i, rb[i,], udPostb[i,], fprob[i,], sum(fprob[i,]), "\n")
     # Trap uphill moves. Either function increases, or gradient changed sign
-    # so step was in wrong direction
-    # Also trap a crazy step having led to a non-finite value (only found when ran on GDR2!)
+    # so step was in wrong direction.
+    # Also trap a crazy step having led to a non-finite value
     if(!all(is.finite(c(rb[i,], udPostb[i,])))
        || any(udPostb[i,] > udPostb[i-1,]) 
        || (rb[i,1]>rb[i-1,1]) || (rb[i,2]<rb[i-1,2])) { 
@@ -186,15 +181,6 @@ hdi.distpost3 <- function(w, wsd, rlen, rMode, HDIprob, verbose=FALSE) {
     }
     if(sum(fprob[i,])>=HDIprob) break()
   }
-  
-  # Report
-  #if(verbose) {
-  #  cat("Results:", rMode, rb[i,], sum(fprob[i,]))
-  #  cat(ifelse(i==iMax && sum(fprob[i,])<HDIprob, 
-  #             " Iteration limit reached\n", "\n"))
-  #  cat("Reintegration using HDI limits:", 
-  #      func.int(func=ud.distpost3, lower=rb[i,1], upper=rb[i,2], w, wsd, rlen)/Z, "\n")
-  #}
   
   # Returns
   if(uphill) {
