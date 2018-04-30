@@ -35,6 +35,10 @@ RUN conda config --system --append channels r && \
     'r-caret=6.0*' \
     'r-rcurl=1.95*' \
     'r-crayon=1.3*' \
+    'r-Polynom' \
+    'r-MASS' \
+    'r-mvtnorm' \
+    'r-pracma' \
     'r-randomforest=4.6*' && \
     conda clean -tipsy && \
     fix-permissions $CONDA_DIR
