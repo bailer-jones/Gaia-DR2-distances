@@ -8,3 +8,5 @@ Use the notebook [distance_posterior_and_estimators.ipynb](distance_posterior_an
 as used in the Gaia-DR2 distance catalogue published in https://arxiv.org/abs/1804.10121 (see [this page](http://www.mpia.de/homes/calj/gdr2_distances.html) for more information).
 
 Code was built with R 3.3.1. Additional libraries required: Polynom, MASS, mvtnorm, pracma
+
+You can also run this code interactively using Binder:  [![Binder](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/ehalley/Gaia-DR2-distances/master)
